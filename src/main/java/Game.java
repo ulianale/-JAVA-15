@@ -1,52 +1,26 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Game {
-    private List<Player> playersList = new ArrayList<>();
+    private HashMap<String, Integer> players = new HashMap<>();
 
     public void register(Player player) {
-        playersList.add(player);
+        players.put(player.getName(), player.getStrength());
     }
 
     public int round(String playerName1, String playerName2) {
-        int s1 = 0; // счетчик для первого игрока
-        int s2 = 0; // счетчик для второго игрока
-        int a1 = 0;
-        int a2 = 0;
 
-        for (Player player : playersList) {
-            if (player.getName().equals(playerName1)) {
-                a1 = player.getStrength();
-                s1++;
-                break;
+        if (players.containsKey(playerName1) && players.containsKey(playerName2)) {
+            if (players.get(playerName1) > players.get(playerName2)) {
+                return 1;
             }
-        }
-        for (Player player : playersList) {
-            if (player.getName().equals(playerName2)) {
-                a2 = player.getStrength();
-                s2++;
-                break;
+            else if (players.get(playerName1) < players.get(playerName2)) {
+                return 2;
+            } else {
+                return 0;
             }
-        }
-        if (s1 == 1 && s2 == 1) {
-            if (a1 > a2) {
-                    return 1;
-                } else if(a1 < a2) {
-                    return 2;
-                } else {
-                    return 0;
-                }
-        } else if(s1 > s2) {
-            throw new NotRegisteredException(
-                    "Игрок " + playerName2 + " не зарегистрирован!"
-            );
-        } else if(s1 < s2) {
-            throw new NotRegisteredException(
-                    "Игрок " + playerName1 + " не зарегистрирован!"
-            );
         } else {
             throw new NotRegisteredException(
-                    "Игроки не зарегистрированы!"
+                    "Игрок(и) не зарегистрирован(ы)"
             );
         }
     }
